@@ -1,0 +1,5 @@
+Completing Mission 1 gave pretty critical, hands-on experience in provisioning a secure, production-ready cloud Linux environment from scratch, basically.
+
+By enforcing least privilege, especially by limiting direct root access and setting up non-root user accounts with tight, scoped sudo permissions, I got a solid baseline for strong identity and access management. Moving around the Linux file system using only command-line utilities built up operational fluency, and doing audits on the system hardware and resource specs gave real insight into performance observation and capacity planning.
+
+Then integrating Git and GitHub into the workflow took it up a notch toward enterprise standards. Version controlling system configuration files and the setup scripts means everything stays fully auditable, team collaboration becomes smoother, and infrastructure can be reproduced reliably across cloud environments. Overall, this mission made it clear that security hardening, CLI proficiency, and version control are tied together—more than just related, they’re basically non-negotiable pillars for modern Cloud and DevOps engineering
