@@ -38,21 +38,21 @@ To allow the host machine to securely interact with the isolated headless virtua
 
 **Host Port 2222** -> **Guest Port 22 (SSH Administration):** Allows secure terminal management from the host using ssh -p 2222 guren@localhost. 
 
-<img width="593" height="388" alt="vbox-port-forwarding" src="https://github.com/user-attachments/assets/716e54c2-a1f4-4620-b50f-a9c295bb1eb2" />
+  <img width="593" height="388" alt="vbox-port-forwarding" src="https://github.com/user-attachments/assets/716e54c2-a1f4-4620-b50f-a9c295bb1eb2" />
 
 # Deployment
 **Docker Installation Method & Versions**
 
-Docker was installed on Ubuntu Server using the Official Docker APT Repository (via containerd.io, docker-ce, docker-ce-cli, and docker-compose-plugin).
+Docker Engine was installed from Ubuntu’s package repository (docker.io, version 29.1.3, with Ubuntu’s containerd). Docker’s official APT repository was also added, and Docker Compose v2 (docker-compose-plugin, version 5.6.0) and Buildx were installed from it.
 
 <img width="1392" height="115" alt="docker-versions" src="https://github.com/user-attachments/assets/c1129a97-5e52-4a8e-8a34-81f57429b83a" />
 <img width="1917" height="155" alt="containers-running" src="https://github.com/user-attachments/assets/313835d0-c941-458c-a535-65b834fe1a00" />
 
 <img width="500" height="1000" alt="ray-so-export" src="https://github.com/user-attachments/assets/ca2368b6-9dcf-4190-a437-36ceb0e80352" />
 
-services:: Declares the multi-container components that make up the stack.
+**services:** Declares the multi-container components that make up the stack.
 
-**db::** Names the service block for the database tier.
+**db:** Names the service block for the database tier.
 
 **image:** mysql:8.0: Pulls the official, stable MySQL version 8.0 image from Docker Hub.
 
@@ -60,23 +60,23 @@ services:: Declares the multi-container components that make up the stack.
 
 **restart: unless-stopped:** Configures Docker to automatically restart the container on system reboots or unexpected crashes, unless manually stopped.
 
-**environment::** Passes secure database initialization variables loaded from the external .env file (MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD).
+**environment:** Passes secure database initialization variables loaded from the external .env file (MYSQL_ROOT_PASSWORD, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD).
 
-**volumes::** Mounts a named persistent storage volume (ccmfinal_mysql_data) to MySQL's default data directory (/var/lib/mysql) so database records survive container recreation or system reboots.
+**volumes:** Mounts a named persistent storage volume (ccmfinal_mysql_data) to MySQL's default data directory (/var/lib/mysql) so database records survive container recreation or system reboots.
 
-**wordpress::** Names the second service block for the web application frontend.
+**wordpress:** Names the second service block for the web application frontend.
 
 **image: wordpress:latest:** Pulls the official WordPress image containing pre-configured Apache and PHP runtimes.container_name: 
 
 **ccmfinal_wordpress:** Sets an explicit container name (ccmfinal_wordpress).   
 
-**depends_on::** Instructs Docker Compose to start the db service first, ensuring the database backend is fully initialized before WordPress attempts connection.
+**depends_on:** Instructs Docker Compose to start the db service first, ensuring the database backend is fully initialized before WordPress attempts connection.
 
-**ports::** Maps port 80 inside the container to port 80 on the VM's network interface, exposing the web frontend.
+**ports:** Maps port 80 inside the container to port 80 on the VM's network interface, exposing the web frontend.
 
 **WORDPRESS_DB_HOST: db:3306:** Directs WordPress to connect to the database service using its internal Docker DNS name (db) on port 3306.
 
-**volumes::** Mounts a separate named volume (ccmfinal_wp_data) to /var/www/html to preserve uploaded media, themes, and configuration changes.
+**volumes:** Mounts a separate named volume (ccmfinal_wp_data) to /var/www/html to preserve uploaded media, themes, and configuration changes.
 
 <img width="1917" height="1198" alt="wordpress-site" src="https://github.com/user-attachments/assets/02df4552-2c6a-4c5f-b935-c02fc64217dc" />
 
@@ -92,7 +92,7 @@ The .env.example File: A safe template file containing blank keys or dummy place
 
 To secure the Ubuntu Server instance, the Uncomplicated Firewall (UFW) is configured with a strict default deny policy:
 
-<img width="700" height="350" alt="ufw" src="https://github.com/user-attachments/assets/59ad100d-26ae-48c0-8691-d4a03747594a" />
+  <img width="700" height="350" alt="ufw" src="https://github.com/user-attachments/assets/59ad100d-26ae-48c0-8691-d4a03747594a" />
 
 - Default Deny Incoming: Rejects all unapproved incoming connection attempts by default.   
 
@@ -112,27 +112,26 @@ Docker manages its own network packet routing by injecting custom iptables rules
 
 **Cron Job Scheduling**
 
-The backup script is automated to execute daily at 2:00 AM Philippine Time (PST).
+The backup script is automated to execute daily at 2:00 AM Philippine Standard Time (Asia/Manila).
 
   - **Cron Expression:**
     0 2 * * * /home/guren/wp-stack/automation-script.sh >> /home/guren/backups/backup.log 2>&1   
 
   - **Field Breakdown:**
-      - 0 — Minute 0
-     
-      - 2 — Hour 2 (2:00 AM)
-      
-      - * — Every day of the month
-
-      - * — Every month
-
-      - * — Every day of the week
+    - `0` — Minute 0
+    - `2` — Hour 2 (2:00 AM)
+    - `*` — Every day of the month
+    - `*` — Every month
+    - `*` — Every day of the week
 
 **Backup Retention & Restoration**
 
   - Storage & Retention: Backups are saved in ~/backups/ and automatically pruned after 7 days using find ... -mtime +7 -delete.
 
   - Restoration Command: To restore a database snapshot from a compressed backup file:
+
+    <img width="3223" height="499" alt="restoration-command" src="https://github.com/user-attachments/assets/c5f405d1-1d4f-4bc1-863a-16ea63ffef9c" />
+
 
 <img width="1865" height="568" alt="backup-proof" src="https://github.com/user-attachments/assets/4128ab56-a964-420d-ad70-c33f2ed7211f" />
 <img width="1462" height="605" alt="crontab" src="https://github.com/user-attachments/assets/adaf7f9a-2868-4b8c-bbfc-8b706a28d85d" />
