@@ -5,7 +5,7 @@
 
 **Application Stack:** WordPress + MySQL
 
-**Prepared by:** Felix, Mark Francis J. | Eulalio, Jericho O | Felipe, Frederick O.
+**Prepared by:** Felix, Mark Francis J. | Eulalio, Jericho O | Felipe, Frederick O. | Lutrania, Mark Ryan S.
 
 **Section:** BSIT 4G
 
