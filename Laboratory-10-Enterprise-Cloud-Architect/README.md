@@ -36,5 +36,6 @@ We used Claude (an AI assistant) for step-by-step guidance, troubleshooting, dia
 - Felix, Mark Francis J.
 - Eulalio, Jericho O.
 - Felipe, Frederick O.
+- Lutrania, Mark Ryan S.
 
 Section: BSIT 4G | Instructor: Jenkielyn C. Torres
