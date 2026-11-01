@@ -148,7 +148,8 @@ volumes:
 
 **volumes:** Mounts a separate named volume (ccmfinal_wp_data) to /var/www/html to preserve uploaded media, themes, and configuration changes.
 
-<img width="1917" height="1095" alt="wordpress-site" src="https://github.com/user-attachments/assets/b10e9b40-d333-46a4-97fb-908a17ad96b7" />
+<img width="1857" height="1142" alt="Screenshot 2026-11-01 154850" src="https://github.com/user-attachments/assets/a2ec948a-f9a2-415c-a40a-8687078e87ca" />
+
 
 **Why MySQL Has No Published Port**
 
