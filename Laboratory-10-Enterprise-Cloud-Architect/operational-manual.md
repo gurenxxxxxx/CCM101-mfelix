@@ -26,9 +26,6 @@ Each layer has one job:
 - **Containers:** `ccmfinal_wordpress` (web tier) and `ccmfinal_db` (database tier).
 - **Volumes:** named Docker volumes that keep the database and WordPress files when containers are recreated.
 
-<img width="2000" height="1414" alt="architecture-diagram" src="https://github.com/user-attachments/assets/62a36d94-24a4-4aee-9eba-badc18abb201" />
-
-
 # VM Setup and Networking
 **Virtual Machine Specifications**
 
@@ -51,8 +48,6 @@ To allow the host machine to securely interact with the isolated headless virtua
 **Host Port 8080** -> **Guest Port 80 (Web Traffic):** Allows a web browser on the physical host laptop to access the WordPress site via http://localhost:8080.
 
 **Host Port 2222** -> **Guest Port 22 (SSH Administration):** Allows secure terminal management from the host using ssh -p 2222 guren@localhost.
-
-  <img width="593" height="388" alt="vbox-port-forwarding" src="https://github.com/user-attachments/assets/716e54c2-a1f4-4620-b50f-a9c295bb1eb2" />
 
 # Deployment
 **Deployment Steps (rebuilding the stack)**
@@ -79,9 +74,6 @@ These steps assume Docker and Docker Compose are already installed (see below).
 **Docker Installation Method & Versions**
 
 Docker Engine was installed from Ubuntu’s package repository (docker.io, version 29.1.3, with Ubuntu’s containerd). Docker’s official APT repository was also added, and Docker Compose v2 (docker-compose-plugin, version 5.6.0) and Buildx were installed from it.
-
-<img width="1392" height="115" alt="docker-versions" src="https://github.com/user-attachments/assets/c1129a97-5e52-4a8e-8a34-81f57429b83a" />
-<img width="1917" height="155" alt="containers-running" src="https://github.com/user-attachments/assets/313835d0-c941-458c-a535-65b834fe1a00" />
 
 **docker-compose.yml**
 
@@ -148,8 +140,6 @@ volumes:
 
 **volumes:** Mounts a separate named volume (ccmfinal_wp_data) to /var/www/html to preserve uploaded media, themes, and configuration changes.
 
-<img width="1857" height="1142" alt="Screenshot 2026-11-01 154850" src="https://github.com/user-attachments/assets/a2ec948a-f9a2-415c-a40a-8687078e87ca" />
-
 
 **Why MySQL Has No Published Port**
 
@@ -185,8 +175,6 @@ sudo ufw status verbose
 **The Docker-and-UFW Caveat**
 
 Docker adds its own firewall rules (through iptables) for every port it publishes, and these rules are applied before UFW's rules. This means UFW does not control published container ports: a port published by Docker is reachable even if UFW would deny it. In this setup, the protection comes from publishing only port 80 and giving MySQL no ports: entry, so nothing else is exposed through Docker.
-
-<img width="1556" height="366" alt="ufw-status" src="https://github.com/user-attachments/assets/63069b52-a9b2-424d-9c14-6167542e01bb" />
 
 # Automation and Disaster Recovery
 
@@ -232,12 +220,7 @@ sudo systemctl restart cron
 gunzip -c ~/backups/wordpress_2026-10-21_12-27-54.sql.gz | docker exec -i ccmfinal_db sh -c 'exec mysql -u root -p"$MYSQL_ROOT_PASSWORD" wordpress'
 ```
 
-<img width="1865" height="568" alt="backup-proof" src="https://github.com/user-attachments/assets/4128ab56-a964-420d-ad70-c33f2ed7211f" />
-<img width="1462" height="605" alt="crontab" src="https://github.com/user-attachments/assets/adaf7f9a-2868-4b8c-bbfc-8b706a28d85d" />
-
-
 # Verification and Persistence Test
-<img width="1917" height="1125" alt="reboot-test" src="https://github.com/user-attachments/assets/709da6f7-0ac5-4093-983e-b9bec6d72fe4" />
 
 **Reboot Persistence Proof**
 
@@ -269,4 +252,4 @@ Executing a system reboot (sudo reboot) and validating the environment shows tha
 | **.env not found error** | Missing configuration file during stack initialization. Symptoms: "variable is not set" warnings, and WordPress showing "Error establishing a database connection." | Copy `.env.example` to `.env` and fill in required database parameters. |
 | **Docker permission denied** | User account lacks privileges to access the Docker Unix socket. | Add user to the docker group: `sudo usermod -aG docker $USER && newgrp docker`. |
 | **SSH server not installed** | The OpenSSH server option was not ticked in the Ubuntu installer. | Install package manually: `sudo apt update && sudo apt install openssh-server -y`. |
-| **Installation freeze (CPU soft lockup)** | The virtual CPU stopped responding during the install; the console showed `watchdog: BUG: soft lockup - CPU stuck`. | [FILL IN: the VirtualBox settings you changed, e.g. Settings > System > ...] |
+| **Installation freeze (CPU soft lockup)** | The virtual CPU stopped responding during the install; the console showed `watchdog: BUG: soft lockup - CPU stuck`. | In VirtualBox, open Settings > System > Processor and set the CPU count to 2, then restart the installation. |
